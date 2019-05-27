@@ -2,6 +2,8 @@
 
 The source code for a ground reaction curve is presented in this repository.
 
+![Ground_curve](https://github.com/onurkoc/ground-curve/blob/master/images/Ground-curve_new.png)
+
 👉 [View the Dash App](https://ground-curve.herokuapp.com/)
 
 Works with Python > 3.6
