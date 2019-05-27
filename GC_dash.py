@@ -327,8 +327,8 @@ def update_output(gamma_value, overburden_value, e_module, nu_value,
     if len(p3.x) != 0:
         flag = p3.x
         fig = draw(x1=p1.x, y1=p1.y,
-                   x2=p2.x, y2=p2.y,
-                   x3=p3.x, y3=p3.y,
+                   x2=p2_el.x, y2=p2_el.y,
+                   x3=p3_el.x, y3=p3_el.y,
                    safety_factor=safety_factor_el,
                    flag=flag,
                    x4=p4.x, y4=p4.y,
