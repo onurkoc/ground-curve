@@ -12,7 +12,10 @@ def draw(x1, y1,
          x4=None, y4=None,
          x5=None, y5=None,
          x6=None, y6=None,
-         x7=None, y7=None):
+         x7=None, y7=None,
+         x8=None, y8=None,
+         x9=None, y9=None,
+         x10=None, y10=None):
     trace0 = go.Scatter(
         x=x1,
         y=y1,
@@ -28,7 +31,7 @@ def draw(x1, y1,
         x=x2,
         y=y2,
         mode='lines',
-        name='Support',
+        name='Support (LE)',
         line=dict(
             color='green'
         ),
@@ -46,10 +49,11 @@ def draw(x1, y1,
         )
     )
 
-    fig = tools.make_subplots(rows=2, cols=1,
+    fig = tools.make_subplots(rows=2, cols=2,
                               shared_xaxes=True,
                               shared_yaxes=False,
                               vertical_spacing=0.07,
+                              horizontal_spacing=0.07,
                               # subplot_titles=('Ground Reaction Curve',
                               #                 'Displacement Curve')
                               )
@@ -115,6 +119,39 @@ def draw(x1, y1,
         )
         fig.append_trace(trace6, 2, 1)
 
+    trace7 = go.Scatter(
+        x=x8,
+        y=y8,
+        mode='lines',
+        name='SCL (NL)',
+        line=dict(
+            color='#7FFF00'
+        )
+    )
+    fig.append_trace(trace7, 1, 2)
+
+    trace8 = go.Scatter(
+        x=x9,
+        y=y9,
+        mode='lines',
+        name='Flow Rate',
+        line=dict(
+            color='brown'
+        )
+    )
+    fig.append_trace(trace8, 2, 2)
+
+    trace9 = go.Scatter(
+        x=x10,
+        y=y10,
+        mode='lines',
+        name='Sigma (NL)',
+        line=dict(
+            color='#32CD32'
+        )
+    )
+    fig.append_trace(trace9, 2, 2)
+
     layout = go.Layout(
         plot_bgcolor='#f9f7f7',
         showlegend=True,
@@ -130,25 +167,36 @@ def draw(x1, y1,
         ),
         hovermode='closest',
         autosize=True,
-        width=800,
+        width=1200,
         height=800,
         xaxis=dict(
             rangemode='normal',
             titlefont=dict(size=14),
+            title='Tunnel Wall Displacement [m]',
+            side='bottom'
         ),
         yaxis=dict(
             scaleratio=0.1,
             tickformat='.2f',
             title='Support Pressure [MPa]',
             titlefont=dict(size=14),
+            range=[0, max(y1)]
         ),
         xaxis2=dict(
-            side='top',
-            title='Tunnel Wall Displacement [m]',
+            side='bottom',
+            title='Time [days]',
         ),
         yaxis2=dict(
+            title='Support Pressure Pi [MPa]',
+            range=[0, max(y1)]
+        ),
+        yaxis3=dict(
             autorange='reversed',
             title='Distance from Tunnel Face [m]',
+        ),
+        yaxis4=dict(
+            title='Stress SCL [MPa]',
+            range=[0, max(y10)]
         ),
         legend=dict(
             traceorder='normal',
