@@ -334,13 +334,17 @@ def update_output(gamma_value, overburden_value, e_module, nu_value,
                    x4=p4.x, y4=p4.y,
                    x5=p7.x, y5=p7.y,
                    x6=p8.x, y6=p8.y,
-                   x7=p9.x, y7=p9.y)
+                   x7=p9.x, y7=p9.y,
+                   x8=p5.x, y8=p5.y,
+                   x9=p10.x, y9=p10.y,
+                   x10=p11.x, y10=p11.y)
     else:
         fig = draw(x1=p1.x, y1=p1.y,
                    x2=p2_el.x, y2=p2_el.y,
                    x3=p3_el.x, y3=p3_el.y,
                    safety_factor=safety_factor_el,
-                   x4=p4.x, y4=p4.y)
+                   x4=p4.x, y4=p4.y,
+                   x8=p5.x, y8=p5.y)
 
     return dcc.Graph(figure=fig)
 
