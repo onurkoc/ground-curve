@@ -185,6 +185,15 @@ app.layout = html.Div([
                                 min=0,
                                 max=5,
                                 step=0.1
+                            ),
+                            html.Div(id='advance-rate-value-container',
+                                     style={'margin': '10px 0px'}),
+                            named_slider(
+                                my_id='advance_rate_value',
+                                value=5,
+                                min=1,
+                                max=10,
+                                step=0.1
                             )
                         ])
                    ]),
@@ -293,6 +302,14 @@ def update_output(slider_value):
 
 
 @app.callback(
+    Output('advance-rate-value-container', 'children'),
+    [Input('advance_rate_value', 'value')]
+)
+def update_output(slider_value):
+    return f'Advance Rate: {slider_value:0.1f} [m/day]'
+
+
+@app.callback(
     Output('plotly-figure', 'children'),
     [Input('gamma_value', 'value'),
      Input('overburden_value', 'value'),
@@ -304,15 +321,16 @@ def update_output(slider_value):
      Input('f_ck_value', 'value'),
      Input('e_c_value', 'value'),
      Input('t_c_value', 'value'),
-     Input('dis_sup_value', 'value')]
+     Input('dis_sup_value', 'value'),
+     Input('advance_rate_value', 'value')]
 )
 def update_output(gamma_value, overburden_value, e_module, nu_value,
                   diameter_value, cohesion_value, phi_value, f_ck_value,
-                  e_c_value, t_c_value, dis_sup_value):
+                  e_c_value, t_c_value, dis_sup_value, advance_rate_value):
     values = gc(gamma=gamma_value, H=overburden_value, E=e_module,
                 nu=nu_value, D=diameter_value, c=cohesion_value,
                 phi=phi_value, f_ck=f_ck_value, E_c=e_c_value, t_c=t_c_value,
-                dis_sup=dis_sup_value)
+                dis_sup=dis_sup_value, advance_rate=advance_rate_value)
     if len(values) == 13:
         p1, p2, p2_el, p3, p3_el, p4, p5, p6, v1, v1_el, v2, v2_el, v3 = values
     else:
