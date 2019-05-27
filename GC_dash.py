@@ -10,6 +10,8 @@ app = dash.Dash(
     external_stylesheets=['https://codepen.io/chriddyp/pen/bWLwgP.css']
 )
 
+server = app.server
+
 
 def header(title):
     return html.Div(
