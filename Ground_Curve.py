@@ -4,8 +4,8 @@ from Rate_of_Flow import rate_of_flow as rof
 import numpy as np
 
 
-def ground_curve(gamma=24.4, H=400, nu=0.3, E=100000, D=5.5, c=625, phi=23.79,
-                 f_ck=25, E_c=15000, nu_c=0.2, t_c=0.2, dis_sup=1,
+def ground_curve(gamma=20, H=200, nu=0.3, E=1050000, D=5, c=1000, phi=28,
+                 f_ck=20, E_c=5000, nu_c=0.20, t_c=0.2, dis_sup=2,
                  advance_rate=5):
     """
     # --------------------------------
@@ -58,10 +58,11 @@ def ground_curve(gamma=24.4, H=400, nu=0.3, E=100000, D=5.5, c=625, phi=23.79,
     r_p = r_o * (2 * (p_o * (k - 1) + sigma_cm) / (1 + k) / (
                 (k - 1) * p_i + sigma_cm)) ** (1 / (k - 1))
 
-    r_p = np.where(p_i < p_cr, r_p, r_o)
-    # [m] - radius of the plastic zone
-    # if the support pressure is higher than critical pressure then the
-    # plastic radius is equal to tunnel radius
+    # r_p = np.where(p_i < p_cr, r_p, r_o) <-- not needed
+    # in order to draw the plastic radius curve if needed
+    # # [m] - radius of the plastic zone
+    # # if the support pressure is higher than critical pressure then the
+    # # plastic radius is equal to tunnel radius
 
     u_ip = r_o * (1 + nu) / E * (
         2 * (1 - nu) * (p_o - p_cr) * (r_p / r_o) ** 2 - (
@@ -69,6 +70,9 @@ def ground_curve(gamma=24.4, H=400, nu=0.3, E=100000, D=5.5, c=625, phi=23.79,
     # [m] - inward radial plastic displacement (Pi is a variable)
 
     x = np.where(p_i > p_cr, u_ie, u_ip)
+    # [m] - displacement before and after critical support pressure
+    # x values to draw the blue ground curve#
+    # y values are y = p_i / 1000 : [MPa]
 
     #####################################
     # b. Longitudinal displacement profile
@@ -86,29 +90,29 @@ def ground_curve(gamma=24.4, H=400, nu=0.3, E=100000, D=5.5, c=625, phi=23.79,
     u_if = (u_im / 3) * np.exp(-0.15 * (r_pm / r_o))
     # Displacement at the tunnel face (by Vlachopoulus and Diederichs) [m]
 
-    # Displacement ahead of the face
-
+    # Calculate the displacement ahead of the face:
     x_ = np.arange(-25, 80, 0.1)
     # Distance from tunnel face (an array from -25m ahead and 80m behind the
     # face) [m]
 
     u_ix_a = (u_if) * np.exp(x_ / r_o)
-    # Tunnel wall displacement ahead of the face (x < 0) [m]
+    # Tunnel wall displacement ahead of the face (x < 0) [m]#
+    # NOT NORMALIZED! meaning: * u_im
 
-    # Displacement behind the face
-
+    # Calculate the displacement behind the face:
     u_ix_b = u_im * (1 - (1 - u_if / u_im) * np.exp(
         (-3 * x_ / r_o) / (2 * r_pm / r_o)))
     # Tunnel wall displacement behind the face (x > 0) [m]
+    # NOT NORMALIZED! meaning: * u_im
 
     x_disp = np.where(x_ < 0, u_ix_a, u_ix_b)
-    # x values for displacement
+    # x values for longitudinal displacement profile (LDP)
 
     ################################################
     # c. Calculate the actual/target strength of SCL
     ################################################
 
-    x_sup = np.arange(dis_sup, 80, 1)
+    # x_sup = np.arange(dis_sup, 80, 1)
     # Distance from installation of SCL
 
     u_io = u_im * (1 - (1 - u_if / u_im) * np.exp(
@@ -151,14 +155,14 @@ def ground_curve(gamma=24.4, H=400, nu=0.3, E=100000, D=5.5, c=625, phi=23.79,
     ratio_sc = p_scmax_el / k_sc_el
     u_iy = u_io + ratio_sc
     # displacement at the yield surface of support
-    x_support_el = [u_io, u_iy, u_iy * 1.002]
-    y_support_el = [0, p_scmax_el, p_scmax_el]
+    x_support_el = np.array([u_io, u_iy, u_iy * 1.05])
+    y_support_el = np.array([0, p_scmax_el, p_scmax_el])
 
     x_sup_intersect = np.linspace(u_io, u_iy, len(x))
     y_sup_intersect = np.linspace(0, p_scmax_el, len(x))
 
     # find the intersection of support & ground curves
-    x_int_el, y_int_el = intersection(x_sup_intersect, y_sup_intersect, x,
+    x_int_el, y_int_el = intersection(x_support_el, y_support_el, x,
                                       p_i / 1000)
 
     # define for convenience named tuples
@@ -191,7 +195,7 @@ def ground_curve(gamma=24.4, H=400, nu=0.3, E=100000, D=5.5, c=625, phi=23.79,
     if len(p3.x) != 0:
         # find the radius of plastic zone at the equilibrium point
         r_pl_sup = r_o * (2 * (p_o * (k - 1) + sigma_cm) / (1 + k) / (
-            (k - 1) * y_int[0] * 1000 + sigma_cm)) ** (1 / (k - 1))
+            (k - 1) * y_int_el[0] * 1000 + sigma_cm)) ** (1 / (k - 1))
 
         p_point = p_i[np.where(x >= x_int[0])]
         x_updated = np.linspace(0, 80, len(p_point))
@@ -220,8 +224,8 @@ def ground_curve(gamma=24.4, H=400, nu=0.3, E=100000, D=5.5, c=625, phi=23.79,
                 p_x_l.append(x1)
                 p_y_l.append(y1)
         p_point_x = np.array(p_point_x)
-        p_x_l = np.array(p_x_l)
-        p_y_l = np.array(p_y_l)
+        p_x_l = np.array(p_x_l).flatten()
+        p_y_l = np.array(p_y_l).flatten()
 
         # update the longitudinal displacement behind the face
         u_im_updated = r_o * (1 + nu) / E * (
