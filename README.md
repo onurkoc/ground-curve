@@ -2,11 +2,15 @@
 
 The source code for a ground reaction curve is presented in this repository.
 
+![Ground Curve](https://github.com/onurkoc/ground-curve/blob/master/images/Ground-curve.png)
+
 👉 [View the Dash App](https://ground-curve.herokuapp.com/)
 
 Works with Python > 3.6
 
 ### Flow Rate Method
+
+![Flow_rate](https://github.com/onurkoc/ground-curve/blob/master/images/Flow_rate_pic.png)
 
 ![Flow Rate](https://github.com/onurkoc/ground-curve/blob/master/images/flow_rate_formula.png)
 
