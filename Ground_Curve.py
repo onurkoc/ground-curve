@@ -31,7 +31,7 @@ def ground_curve(gamma=20, H=200, nu=0.3, E=1050000, D=5, c=1000, phi=28,
     """
     p_o = gamma * H  # [kPa]   - in situ stress
     Phi = np.deg2rad(phi)  # [rad] - conversion from degrees to radians
-    p_i = np.linspace(0, p_o, 1000)
+    p_i = np.linspace(0, p_o, 5000)
     # [kPa] - Support pressure (an array from zero to insitu stress)
     sigma_cm = 2 * c * np.cos(Phi) / (1 - np.sin(
         Phi))  # [kPa] - the uniaxial strength of the rock mass
@@ -155,15 +155,16 @@ def ground_curve(gamma=20, H=200, nu=0.3, E=1050000, D=5, c=1000, phi=28,
     ratio_sc = p_scmax_el / k_sc_el
     u_iy = u_io + ratio_sc
     # displacement at the yield surface of support
-    x_support_el = np.array([u_io, u_iy, u_iy * 1.05])
+    x_support_el = np.array([u_io, u_iy, u_iy * 1.005])
     y_support_el = np.array([0, p_scmax_el, p_scmax_el])
 
-    x_sup_intersect = np.linspace(u_io, u_iy, len(x))
-    y_sup_intersect = np.linspace(0, p_scmax_el, len(x))
+    # not used -> commented out
+    # x_sup_intersect = np.linspace(u_io, u_iy, len(x))
+    # y_sup_intersect = np.linspace(0, p_scmax_el, len(x))
 
     # find the intersection of support & ground curves
-    x_int_el, y_int_el = intersection(x_support_el, y_support_el, x,
-                                      p_i / 1000)
+    x_int_el, y_int_el = intersection(x_support_el, y_support_el,
+                                      x, p_i/1000)
 
     # define for convenience named tuples
     Plot = namedtuple('Plot', 'x y')
@@ -193,29 +194,33 @@ def ground_curve(gamma=20, H=200, nu=0.3, E=1050000, D=5, c=1000, phi=28,
     v3 = Var(name='dis_sup', val=dis_sup)
 
     if len(p3.x) != 0:
-        # find the radius of plastic zone at the equilibrium point
-        r_pl_sup = r_o * (2 * (p_o * (k - 1) + sigma_cm) / (1 + k) / (
-            (k - 1) * y_int_el[0] * 1000 + sigma_cm)) ** (1 / (k - 1))
+        p_point = p_i[np.where(x > x_int_el[0])]  # [kPa]
+        x_updated = np.linspace(-25, 80, len(p_point))  # [m]
 
-        p_point = p_i[np.where(x >= x_int_el[0])]
-        x_updated = np.linspace(0, 80, len(p_point))
-        p_scl = np.linspace(x_support_el[0], x_int_el[0], len(p_point))
+        # varying the distance from tunnel face
+        p_scl = np.linspace(u_io, x_int_el[0], len(p_point))  # [m]
         p_point_x = []
-        r_pl_inc = []
+
         p_x_l = []
         p_y_l = []
+
+        # find the radius of plastic zone at the equilibrium point
+        r_pl_sup = r_o * (2 * (p_o * (k - 1) + sigma_cm) / (1 + k) / (
+                (k - 1) * max(p_point) + sigma_cm)) ** (1 / (k - 1))
 
         for p_scl_inc, p_inc in zip(p_scl, p_point):
             r_pl_sup_inc = r_o * (2 * (p_o * (k - 1) + sigma_cm) / (1 + k) / (
                 (k - 1) * p_inc + sigma_cm)) ** (1 / (k - 1))
-            r_pl_inc.append(r_pl_sup_inc)
+
             u_im_inc = r_o * (1 + nu) / E * (
                 2 * (1 - nu) * (p_o - p_cr) * (r_pl_sup_inc / r_o) ** 2 - (
                     1 - 2 * nu) * (p_o))
             u_if_inc = (u_im_inc / 3) * np.exp(-0.15 * (r_pl_sup_inc / r_o))
+            u_ix_a_inc = (u_if_inc) * np.exp(x_updated / r_o)
             u_ix_b_inc = u_im_inc * (1 - (1 - u_if_inc / u_im_inc) * np.exp(
                 (-3 * x_updated / r_o) / (2 * r_pl_sup_inc / r_o)))
-            p_point_x.append(u_ix_b_inc)
+            u_ix_inc = np.where(x_updated < 0, u_ix_a_inc, u_ix_b_inc)
+            p_point_x.append(u_ix_inc)
             # intersection points with vertical lines
             p_ver_x = np.array([p_scl_inc, p_scl_inc])
             p_ver_y = np.array([0, 50])
@@ -234,11 +239,14 @@ def ground_curve(gamma=20, H=200, nu=0.3, E=1050000, D=5, c=1000, phi=28,
         # Maximum displacement [m] - r_p = r_pm; p_i = 0
         u_if_updated = (u_im_updated / 3) * np.exp(-0.15 * (r_pl_sup / r_o))
         # Displacement at the tunnel face (by Vlachopoulus and Diederichs) [m]
+        u_ix_a_updated = (u_if_updated) * np.exp(x_updated / r_o)
+        # Tunnel wall displacement ahead the face (x < 0) [m]
         u_ix_b_updated = u_im_updated * (
             1 - (1 - u_if_updated / u_im_updated) * np.exp(
                 (-3 * x_updated / r_o) / (2 * r_pl_sup / r_o)))
+        u_ix_updated = np.where(x_updated < 0, u_ix_a_updated, u_ix_b_updated)
         # Tunnel wall displacement behind the face (x > 0) [m]
-        p7 = Plot(x=u_ix_b_updated, y=x_updated)
+        p7 = Plot(x=u_ix_updated, y=x_updated)
         p8 = Plot(x=p_point_x, y=x_updated)
         p9 = Plot(x=p_x_l, y=p_y_l)  # points of the intersection of the curves
         sigma_actual, arr_hours = rof(disp_array_2d=p9, rate=advance_rate)
