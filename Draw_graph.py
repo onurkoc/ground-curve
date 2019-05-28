@@ -79,21 +79,22 @@ def draw(x1, y1,
     shapes = list()  # append the vertical lines later
 
     if flag is not None:
-        trace4 = go.Scatter(
-            x=x5,
-            y=y5,
-            mode='lines',
-            line=dict(
-                color='green',
-                width=1.5,
-                dash='dashdot'
-            ),
-            name='Equil. LDP',
-            showlegend=False
-        )
-        fig.append_trace(trace4, 2, 1)
+        # this trace is not needed anymore
+        # trace4 = go.Scatter(
+        #     x=x5,
+        #     y=y5,
+        #     mode='lines',
+        #     line=dict(
+        #         color='green',
+        #         width=1.5,
+        #         dash='dashdot'
+        #     ),
+        #     name='Equil. LDP',
+        #     showlegend=False
+        # )
+        # fig.append_trace(trace4, 2, 1)
         for index, item in enumerate(x6):
-            if index % 10 == 0:
+            if index % 30 == 0:
                 trace5 = go.Scatter(
                     x=item,
                     y=y6,
@@ -111,6 +112,24 @@ def draw(x1, y1,
                     opacity=0.4
                 )
                 fig.append_trace(trace5, 2, 1)
+
+        trace5 = go.Scatter(
+            x=x6[-1],
+            y=y6,
+            mode='lines',
+            line=dict(
+                color='green',
+                width=1.5,
+                dash='dashdot'
+            ),
+            visible=True,
+            showlegend=False,
+            legendgroup="group",
+            hoverinfo='none',
+            name='Diff. p_i',
+            opacity=1
+        )
+        fig.append_trace(trace5, 2, 1)
 
         # vertical lines
         for i in (x2[0], x3[0]):
@@ -210,15 +229,18 @@ def draw(x1, y1,
         ),
         yaxis2=dict(
             title='Support Pressure Pi [MPa]',
+            tickformat='.2f',
             range=[0, max(y1)]
         ),
         yaxis3=dict(
             autorange='reversed',
             title='Distance from Tunnel Face [m]',
+            range=[80, -25]
         ),
         yaxis4=dict(
             title='Stress SCL [MPa]',
-            range=[0, max(y10)]
+            tickformat='.2f',
+            # range=[0, max(y10)]
         ),
         legend=dict(
             traceorder='normal',
