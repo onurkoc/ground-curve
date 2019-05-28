@@ -24,7 +24,7 @@ def draw(x1, y1,
         line=dict(
             color='blue'
         ),
-        hoverinfo='none',
+        # hoverinfo='none',
     )
 
     trace1 = go.Scatter(
@@ -33,9 +33,9 @@ def draw(x1, y1,
         mode='lines',
         name='Support (LE)',
         line=dict(
-            color='green'
+            color='red'
         ),
-        hoverinfo='none'
+        # hoverinfo='none'
     )
 
     trace2 = go.Scatter(
@@ -44,8 +44,8 @@ def draw(x1, y1,
         mode='markers',
         name=f'F.S.={safety_factor:0.2f}',
         marker=dict(
-            size=5,
-            color='red'
+            size=7,
+            color='green'
         )
     )
 
@@ -76,6 +76,8 @@ def draw(x1, y1,
 
     fig.append_trace(trace3, 2, 1)
 
+    shapes = list()  # append the vertical lines later
+
     if flag is not None:
         trace4 = go.Scatter(
             x=x5,
@@ -86,7 +88,8 @@ def draw(x1, y1,
                 width=1.5,
                 dash='dashdot'
             ),
-            name='Equil. LDP'
+            name='Equil. LDP',
+            showlegend=False
         )
         fig.append_trace(trace4, 2, 1)
         for index, item in enumerate(x6):
@@ -104,9 +107,26 @@ def draw(x1, y1,
                     showlegend=False,
                     legendgroup="group",
                     hoverinfo='none',
-                    name='Diff. p_i'
+                    name='Diff. p_i',
+                    opacity=0.4
                 )
                 fig.append_trace(trace5, 2, 1)
+
+        # vertical lines
+        for i in (x2[0], x3[0]):
+            shapes.append({'type': 'line',
+                           'xref': 'x',
+                           'yref': 'y3',
+                           'x0': i,
+                           'y0': 0,
+                           'x1': i,
+                           'y1': 80,
+                           'line': {
+                               'color': 'red',
+                               'width': 1.5,
+                               'dash': 'dashdot'},
+                           'opacity' : 0.6
+                           })
 
         trace6 = go.Scatter(
             x=x7,
@@ -114,7 +134,8 @@ def draw(x1, y1,
             mode='lines',
             name='New LDP',
             line=dict(
-                color='red'
+                color='red',
+                width=2
             )
         )
         fig.append_trace(trace6, 2, 1)
@@ -125,7 +146,7 @@ def draw(x1, y1,
         mode='lines',
         name='SCL (NL)',
         line=dict(
-            color='#7FFF00'
+            color='red'
         )
     )
     fig.append_trace(trace7, 1, 2)
@@ -136,7 +157,7 @@ def draw(x1, y1,
         mode='lines',
         name='Flow Rate',
         line=dict(
-            color='brown'
+            color='blue'
         )
     )
     fig.append_trace(trace8, 2, 2)
@@ -147,7 +168,7 @@ def draw(x1, y1,
         mode='lines',
         name='Sigma (NL)',
         line=dict(
-            color='#32CD32'
+            color='red'
         )
     )
     fig.append_trace(trace9, 2, 2)
@@ -173,7 +194,8 @@ def draw(x1, y1,
             rangemode='normal',
             titlefont=dict(size=14),
             title='Tunnel Wall Displacement [m]',
-            side='bottom'
+            side='bottom',
+            range=[0, max(x1)]
         ),
         yaxis=dict(
             scaleratio=0.1,
@@ -208,7 +230,8 @@ def draw(x1, y1,
             bgcolor='#E2E2E2',
             bordercolor='#FFFFFF',
             borderwidth=1.5
-        )
+        ),
+        shapes=shapes
     )
 
     fig['layout'].update(layout)
