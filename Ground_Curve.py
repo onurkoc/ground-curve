@@ -31,7 +31,7 @@ def ground_curve(gamma=20, H=200, nu=0.3, E=1050000, D=5, c=1000, phi=28,
     """
     p_o = gamma * H  # [kPa]   - in situ stress
     Phi = np.deg2rad(phi)  # [rad] - conversion from degrees to radians
-    p_i = np.linspace(0, p_o, 5000)
+    p_i = np.linspace(0, p_o, 3000)
     # [kPa] - Support pressure (an array from zero to insitu stress)
     sigma_cm = 2 * c * np.cos(Phi) / (1 - np.sin(
         Phi))  # [kPa] - the uniaxial strength of the rock mass
