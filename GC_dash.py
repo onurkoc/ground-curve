@@ -7,7 +7,7 @@ from Draw_graph import draw
 
 app = dash.Dash(
     __name__,
-    external_stylesheets=['https://codepen.io/chriddyp/pen/bWLwgP.css']
+    # external_stylesheets=['https://codepen.io/chriddyp/pen/bWLwgP.css']
 )
 
 server = app.server
