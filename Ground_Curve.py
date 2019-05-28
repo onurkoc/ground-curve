@@ -197,9 +197,9 @@ def ground_curve(gamma=20, H=200, nu=0.3, E=1050000, D=5, c=1000, phi=28,
         r_pl_sup = r_o * (2 * (p_o * (k - 1) + sigma_cm) / (1 + k) / (
             (k - 1) * y_int_el[0] * 1000 + sigma_cm)) ** (1 / (k - 1))
 
-        p_point = p_i[np.where(x >= x_int[0])]
+        p_point = p_i[np.where(x >= x_int_el[0])]
         x_updated = np.linspace(0, 80, len(p_point))
-        p_scl = np.linspace(x_support[0], x_int[0], len(p_point))
+        p_scl = np.linspace(x_support_el[0], x_int_el[0], len(p_point))
         p_point_x = []
         r_pl_inc = []
         p_x_l = []
