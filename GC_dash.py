@@ -5,10 +5,10 @@ from dash.dependencies import Output, Input
 from Ground_Curve import ground_curve as gc
 from Draw_graph import draw
 
-app = dash.Dash(
-    __name__,
-    # external_stylesheets=['https://codepen.io/chriddyp/pen/bWLwgP.css']
-)
+
+app = dash.Dash(__name__)
+
+app.title = 'Ground Reaction Curve'
 
 server = app.server
 
@@ -118,15 +118,6 @@ app.layout = html.Div([
                                 max=0.49,
                                 step=0.01
                             ),
-                            html.Div(id='diameter-value-container',
-                                     style={'margin': '10px 0px'}),
-                            named_slider(
-                                my_id='diameter_value',
-                                value=5,
-                                min=3,
-                                max=20,
-                                step=0.1
-                            ),
                             html.Div(id='cohesion-value-container',
                                      style={'margin': '10px 0px'}),
                             named_slider(
@@ -145,10 +136,19 @@ app.layout = html.Div([
                                 max=40,
                                 step=0.1
                             ),
-                            html.Div('Concrete Properties:', style={
+                            html.Div('Other Properties:', style={
                                 'borderBottom': 'thin lightgrey solid',
                                 'font-family': 'Arial', 'fontSize': 18
                             }),
+                            html.Div(id='diameter-value-container',
+                                     style={'margin': '10px 0px'}),
+                            named_slider(
+                                my_id='diameter_value',
+                                value=5,
+                                min=3,
+                                max=20,
+                                step=0.1
+                            ),
                             html.Div(id='f_ck-value-container',
                                      style={'margin': '10px 0px',
                                             'marginTop': 20}),
@@ -218,7 +218,7 @@ app.layout = html.Div([
     [Input('gamma_value', 'value')]
 )
 def update_output(slider_value):
-    return f'γ: {slider_value:0.2f} [kN/m³]'
+    return f'γ: {slider_value:0.1f} [kN/m³]'
 
 
 @app.callback(
@@ -226,7 +226,7 @@ def update_output(slider_value):
     [Input('overburden_value', 'value')]
 )
 def update_output(slider_value):
-    return f'Overburden: {slider_value:0.1f} [m]'
+    return f'Overburden: {slider_value:d} [m]'
 
 
 @app.callback(
@@ -250,7 +250,7 @@ def update_output(slider_value):
     [Input('diameter_value', 'value')]
 )
 def update_output(slider_value):
-    return f'Diameter: {slider_value:0.2f} [m]'
+    return f'Tunnel Diameter: {slider_value:0.2f} [m]'
 
 
 @app.callback(
@@ -266,7 +266,7 @@ def update_output(slider_value):
     [Input('phi_value', 'value')]
 )
 def update_output(slider_value):
-    return f'φ: {slider_value:0.2f} [°]'
+    return f'φ: {slider_value:0.1f} [°]'
 
 
 @app.callback(
@@ -274,7 +274,7 @@ def update_output(slider_value):
     [Input('f_ck_value', 'value')]
 )
 def update_output(slider_value):
-    return f'Strength: {slider_value:d} [MPa]'
+    return f'SpC Strength: {slider_value:d} [MPa]'
 
 
 @app.callback(
@@ -282,7 +282,7 @@ def update_output(slider_value):
     [Input('e_c_value', 'value')]
 )
 def update_output(slider_value):
-    return f'Elasticity: {slider_value:,} [MPa]'
+    return f'SpC Elasticity: {slider_value:,} [MPa]'
 
 
 @app.callback(
@@ -290,7 +290,7 @@ def update_output(slider_value):
     [Input('t_c_value', 'value')]
 )
 def update_output(slider_value):
-    return f'Thickness: {slider_value:0.2f} [m]'
+    return f'SpC Thickness: {slider_value:0.2f} [m]'
 
 
 @app.callback(
@@ -298,7 +298,7 @@ def update_output(slider_value):
     [Input('dis_sup_value', 'value')]
 )
 def update_output(slider_value):
-    return f'Support-Face Distance: {slider_value:0.2f} [m]'
+    return f'SpC-Face Distance: {slider_value:0.1f} [m]'
 
 
 @app.callback(
