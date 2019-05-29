@@ -234,7 +234,7 @@ def update_output(slider_value):
     [Input('e_module', 'value')]
 )
 def update_output(slider_value):
-    return f'E-Module: {slider_value:,} [MPa]'
+    return f'E-Module: {slider_value:,} [kPa]'
 
 
 @app.callback(
