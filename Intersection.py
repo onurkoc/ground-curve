@@ -1,3 +1,7 @@
+"""
+Intersection of two curves
+Source: https://github.com/sukhbinder/intersection
+"""
 import numpy as np
 
 
