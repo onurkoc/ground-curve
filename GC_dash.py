@@ -3,7 +3,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Output, Input
 from Ground_Curve import ground_curve as gc
-from Draw_graph import draw
+from Draw_graph_copy import draw
+from textwrap import dedent
 
 
 app = dash.Dash(__name__)
@@ -206,7 +207,25 @@ app.layout = html.Div([
                           'marginRight': 0,
                           'padding': 0},
                    children=[
-                       html.Div(id='plotly-figure')
+                       row([
+                            html.Div(id='plotly-figure'),
+                            row(id='Source Code',
+                                style={'width': '15%',
+                                       'borderTop': 'thin lightgrey solid',
+                                       'marginRight': 20,
+                                       'marginLeft': 10,
+                                       'marginTop': 20,
+                                       'fontSize': 16,
+                                       'font-family': 'Arial'
+                                       },
+                                children=[
+                                    dcc.Markdown(dedent(
+                                    '''
+                                    [Source Code](
+                                    https://github.com/onurkoc/ground-curve)
+                                    '''))]
+                    )
+                       ])
                    ])
         ])
     ])
