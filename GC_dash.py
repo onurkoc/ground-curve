@@ -3,7 +3,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Output, Input
 from Ground_Curve import ground_curve as gc
-from Draw_graph_copy import draw
+from Draw_graph import draw
 from textwrap import dedent
 
 
