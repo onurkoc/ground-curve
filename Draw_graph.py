@@ -175,7 +175,8 @@ def draw(x1, y1,
             color='red'
         ),
         xaxis='x2',
-        yaxis='y4'
+        yaxis='y4',
+        hoverinfo='x+y'
     )
 
     data.extend([trace7, trace8, trace9])
@@ -201,6 +202,7 @@ def draw(x1, y1,
             rangemode='normal',
             title='Tunnel Wall Displacement [m]',
             range=[0, max(x1)],
+            tickformat='.3f',
             domain=[0, 0.47],
             anchor='y2'
         ),
@@ -214,13 +216,13 @@ def draw(x1, y1,
         ),
         xaxis2=dict(
             title='Time [days]',
-            tickformat='d',
+            tickformat='.2f',
             domain=[0.55, 1],
             anchor='y4'
         ),
         yaxis2=dict(
             title='Distance from Tunnel Face [m]',
-            tickformat='d',
+            tickformat='.2f',
             anchor='x1',
             range=[80, -25],
             domain=[0, 0.50]
@@ -256,3 +258,32 @@ def draw(x1, y1,
     fig = go.Figure(data=data, layout=layout)
 
     return fig
+
+
+if __name__ == '__main__':
+    from plotly.offline import plot
+    from Ground_Curve import ground_curve as gc
+    values = gc()
+    if len(values) == 13:
+        p1, p2, p2_el, p3, p3_el, p4, p5, p6, v1, v1_el, v2, v2_el, v3 = values
+    else:
+        p1, p2, p2_el, p3, p3_el, p4, p5, p6, p7, p8, p9, p10, p11, v1, \
+        v1_el, v2, v2_el, v3 = values
+    flag = p3.x
+    if len(p3_el.y) != 0:
+        safety_factor_el = v1_el.val / v2_el.val
+    else:
+        safety_factor_el = 0
+    fig = draw(x1=p1.x, y1=p1.y,
+               x2=p2_el.x, y2=p2_el.y,
+               x3=p3_el.x, y3=p3_el.y,
+               safety_factor=safety_factor_el,
+               flag=flag,
+               x4=p4.x, y4=p4.y,
+               x5=p7.x, y5=p7.y,
+               x6=p8.x, y6=p8.y,
+               x7=p9.x, y7=p9.y,
+               x8=p5.x, y8=p5.y,
+               x9=p10.x, y9=p10.y,
+               x10=p11.x, y10=p11.y)
+    plot(fig, filename='ground_curve_basic.html')
