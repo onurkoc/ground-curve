@@ -146,12 +146,13 @@ def draw(x1, y1,
         x=x8,
         y=y8,
         mode='lines',
-        name='SCL (NL)',
+        name='Support (NL)',
         line=dict(
-            color='red'
+            color='green'
         ),
         xaxis='x2',
-        yaxis='y3'
+        yaxis='y3',
+        # showlegend=False,
     )
 
     trace8 = go.Scatter(
@@ -160,7 +161,7 @@ def draw(x1, y1,
         mode='lines',
         name='Flow Rate',
         line=dict(
-            color='blue'
+            color='red'
         ),
         xaxis='x2',
         yaxis='y4'
@@ -170,13 +171,14 @@ def draw(x1, y1,
         x=x10,
         y=y10,
         mode='lines',
-        name='Sigma (NL)',
+        name='Support (NL)',
         line=dict(
-            color='red'
+            color='green'
         ),
         xaxis='x2',
         yaxis='y4',
-        hoverinfo='x+y'
+        showlegend=False,
+        # hoverinfo='x+y'
     )
 
     data.extend([trace7, trace8, trace9])
