@@ -31,7 +31,7 @@ def ground_curve(gamma=20, H=200, nu=0.3, E=1050000, D=5, c=1000, phi=28,
     """
     p_o = gamma * H  # [kPa]   - in situ stress
     Phi = np.deg2rad(phi)  # [rad] - conversion from degrees to radians
-    p_i = np.linspace(0, p_o, 3000)
+    p_i = np.linspace(0, p_o, 5000)
     # [kPa] - Support pressure (an array from zero to insitu stress)
     sigma_cm = 2 * c * np.cos(Phi) / (1 - np.sin(
         Phi))  # [kPa] - the uniaxial strength of the rock mass
@@ -73,6 +73,11 @@ def ground_curve(gamma=20, H=200, nu=0.3, E=1050000, D=5, c=1000, phi=28,
     # [m] - displacement before and after critical support pressure
     # x values to draw the blue ground curve#
     # y values are y = p_i / 1000 : [MPa]
+
+    critical_value_index = (np.abs(p_i - p_cr)).argmin()
+    # returns the index of the minimum value of (p_i - p_cr)
+    x_cr = u_ie[critical_value_index].item()
+    # [m] - displacement where support pressure equals critical pressure
 
     #####################################
     # b. Longitudinal displacement profile
@@ -179,6 +184,7 @@ def ground_curve(gamma=20, H=200, nu=0.3, E=1050000, D=5, c=1000, phi=28,
     p4 = Plot(x=x_disp, y=x_)
     p5 = Plot(x=time_28days[1:], y=y_support)
     p6 = Plot(x=x, y=r_p)
+    point_critical = Plot(x=[x_cr], y=[p_cr/1000])
 
     # needed variables
     v1 = Var(name='P_sc_max', val=p_scmax)
@@ -253,9 +259,10 @@ def ground_curve(gamma=20, H=200, nu=0.3, E=1050000, D=5, c=1000, phi=28,
         p10 = Plot(x=arr_hours/24, y=sigma_actual)
         p11 = Plot(x=time_672hours/24, y=sigma)
         return p1, p2, p2_el, p3, p3_el, p4, p5, p6, p7, p8, p9, p10, p11, \
-            v1, v1_el, v2, v2_el, v3
+            v1, v1_el, v2, v2_el, v3, point_critical
 
-    return p1, p2, p2_el, p3, p3_el, p4, p5, p6, v1, v1_el, v2, v2_el, v3
+    return p1, p2, p2_el, p3, p3_el, p4, p5, p6, v1, v1_el, v2, v2_el, v3, \
+           point_critical
 
 
 if __name__ == '__main__':
