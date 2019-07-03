@@ -13,7 +13,8 @@ def draw(x1, y1,
          x7=None, y7=None,
          x8=None, y8=None,
          x9=None, y9=None,
-         x10=None, y10=None):
+         x10=None, y10=None,
+         x11=None, y11=None):
     trace0 = go.Scatter(
         x=x1,
         y=y1,
@@ -181,7 +182,21 @@ def draw(x1, y1,
         # hoverinfo='x+y'
     )
 
-    data.extend([trace7, trace8, trace9])
+    trace10 = go.Scatter(
+        x=x11,
+        y=y11,
+        mode='markers',
+        name='Critical Point',
+        line=dict(
+            color='brown'
+        ),
+        xaxis='x1',
+        yaxis='y1',
+        showlegend=True,
+        opacity=0.5
+    )
+
+    data.extend([trace7, trace8, trace9, trace10])
 
     layout = go.Layout(
         plot_bgcolor='#f9f7f7',
