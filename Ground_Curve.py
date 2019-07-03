@@ -263,13 +263,3 @@ def ground_curve(gamma=20, H=200, nu=0.3, E=1050000, D=5, c=1000, phi=28,
 
     return p1, p2, p2_el, p3, p3_el, p4, p5, p6, v1, v1_el, v2, v2_el, v3, \
            point_critical
-
-
-if __name__ == '__main__':
-    values = ground_curve()
-    if len(values) == 9:
-        p1, p2, p2_el, p3, p3_el, p4, p5, p6, v1, v1_el, v2, v2_el, v3 = values
-    else:
-        p1, p2, p2_el, p3, p3_el, p4, p5, p6, p7, p8, p9, p10, p11, v1, \
-            v1_el, v2, v2_el, v3 = values
-    print(p1)
