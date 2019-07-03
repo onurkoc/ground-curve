@@ -107,7 +107,7 @@ app.layout = html.Div([
                                 my_id='e_module',
                                 value=1050000,
                                 min=10000,
-                                max=1000000,
+                                max=16000000,
                                 step=10000
                             ),
                             html.Div(id='nu-value-container',
@@ -125,7 +125,7 @@ app.layout = html.Div([
                                 my_id='cohesion_value',
                                 value=1000,
                                 min=0,
-                                max=2000,
+                                max=3000,
                                 step=10
                             ),
                             html.Div(id='phi-value-container',
@@ -134,7 +134,7 @@ app.layout = html.Div([
                                 my_id='phi_value',
                                 value=28,
                                 min=15,
-                                max=40,
+                                max=45,
                                 step=0.1
                             ),
                             html.Div('Other Properties:', style={
@@ -350,11 +350,12 @@ def update_output(gamma_value, overburden_value, e_module, nu_value,
                 nu=nu_value, D=diameter_value, c=cohesion_value,
                 phi=phi_value, f_ck=f_ck_value, E_c=e_c_value, t_c=t_c_value,
                 dis_sup=dis_sup_value, advance_rate=advance_rate_value)
-    if len(values) == 13:
-        p1, p2, p2_el, p3, p3_el, p4, p5, p6, v1, v1_el, v2, v2_el, v3 = values
+    if len(values) == 14:
+        p1, p2, p2_el, p3, p3_el, p4, p5, p6, v1, v1_el, v2, v2_el, v3, \
+        point_critical = values
     else:
         p1, p2, p2_el, p3, p3_el, p4, p5, p6, p7, p8, p9, p10, p11, v1, \
-            v1_el, v2, v2_el, v3 = values
+            v1_el, v2, v2_el, v3, point_critical = values
 
     if len(p3_el.y) != 0:
         safety_factor_el = v1_el.val / v2_el.val
@@ -374,14 +375,16 @@ def update_output(gamma_value, overburden_value, e_module, nu_value,
                    x7=p9.x, y7=p9.y,
                    x8=p5.x, y8=p5.y,
                    x9=p10.x, y9=p10.y,
-                   x10=p11.x, y10=p11.y)
+                   x10=p11.x, y10=p11.y,
+                   x11=point_critical.x, y11=point_critical.y)
     else:
         fig = draw(x1=p1.x, y1=p1.y,
                    x2=p2_el.x, y2=p2_el.y,
                    x3=p3_el.x, y3=p3_el.y,
                    safety_factor=safety_factor_el,
                    x4=p4.x, y4=p4.y,
-                   x8=p5.x, y8=p5.y)
+                   x8=p5.x, y8=p5.y,
+                   x11=point_critical.x, y11=point_critical.y)
 
     return dcc.Graph(figure=fig)
 
