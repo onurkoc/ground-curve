@@ -192,8 +192,7 @@ def draw(x1, y1,
         ),
         xaxis='x1',
         yaxis='y1',
-        showlegend=True,
-        opacity=0.5
+        showlegend=True
     )
 
     data.extend([trace7, trace8, trace9, trace10])
