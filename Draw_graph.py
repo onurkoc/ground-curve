@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+from plotly import tools
 import plotly.graph_objs as go
+
 
 
 def draw(x1, y1,
@@ -201,7 +203,7 @@ def draw(x1, y1,
         plot_bgcolor='#f9f7f7',
         showlegend=True,
         margin=dict(
-            l=75,
+            l=10,
             r=50,
             b=50,
             t=50,
@@ -248,7 +250,8 @@ def draw(x1, y1,
             tickformat='.2f',
             range = [0, max(y1)],
             domain=[0.55, 1],
-            anchor='x2'
+            anchor='x2',
+            rangemode='nonnegative'
         ),
         yaxis4=dict(
             title='Stress SpC [MPa]',
@@ -275,31 +278,3 @@ def draw(x1, y1,
 
     return fig
 
-
-if __name__ == '__main__':
-    from plotly.offline import plot
-    from Ground_Curve import ground_curve as gc
-    values = gc()
-    if len(values) == 13:
-        p1, p2, p2_el, p3, p3_el, p4, p5, p6, v1, v1_el, v2, v2_el, v3 = values
-    else:
-        p1, p2, p2_el, p3, p3_el, p4, p5, p6, p7, p8, p9, p10, p11, v1, \
-        v1_el, v2, v2_el, v3 = values
-    flag = p3.x
-    if len(p3_el.y) != 0:
-        safety_factor_el = v1_el.val / v2_el.val
-    else:
-        safety_factor_el = 0
-    fig = draw(x1=p1.x, y1=p1.y,
-               x2=p2_el.x, y2=p2_el.y,
-               x3=p3_el.x, y3=p3_el.y,
-               safety_factor=safety_factor_el,
-               flag=flag,
-               x4=p4.x, y4=p4.y,
-               x5=p7.x, y5=p7.y,
-               x6=p8.x, y6=p8.y,
-               x7=p9.x, y7=p9.y,
-               x8=p5.x, y8=p5.y,
-               x9=p10.x, y9=p10.y,
-               x10=p11.x, y10=p11.y)
-    plot(fig, filename='ground_curve_basic.html')
