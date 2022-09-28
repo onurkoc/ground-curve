@@ -1,6 +1,6 @@
 import dash
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import dcc
+from dash import html
 from dash.dependencies import Output, Input
 from Ground_Curve import ground_curve as gc
 from Draw_graph import draw
@@ -46,9 +46,15 @@ def column(children=None, width=1, **kwargs):
 
 def named_slider(my_id, **kwargs):
     return html.Div(
-        style={'margin': '10px 0px'},
+        style={'width': '100%',
+               'marginBottom': 0,
+               'marginTop': 0,
+               'marginLeft': 0,
+               'marginRight': 0,
+               'padding': 0,
+               'align': 'left'},
         children=[
-            dcc.Slider(id=my_id, **kwargs)
+            dcc.Slider(id=my_id, marks=None, **kwargs)
         ]
     )
 
@@ -70,9 +76,9 @@ app.layout = html.Div([
                    style={'width': '10%',
                           'display': 'inline-block',
                           'marginBottom': 0,
-                          'marginTop': 40,
+                          'marginTop': 10,
                           'marginLeft': 10,
-                          'marginRight': 0,
+                          'marginRight': 10,
                           'padding': 0,
                           'vertical-align': 'top'
                           },
@@ -83,7 +89,7 @@ app.layout = html.Div([
                                 'font-family': 'Arial', 'fontSize': 18
                             }),
                             html.Div(id='gamma-value-container',
-                                     style={'margin': '10px 0px',
+                                     style={'margin': '5px 0px',
                                             'marginTop': 20}),
                             named_slider(
                                 my_id='gamma_value',
@@ -93,10 +99,10 @@ app.layout = html.Div([
                                 step=0.1
                             ),
                             html.Div(id='overburden-value-container',
-                                     style={'margin': '10px 0px'}),
+                                     style={'margin': '5px 0px'}),
                             named_slider(
                                 my_id='overburden_value',
-                                value=200,
+                                value=500,
                                 min=10,
                                 max=1000,
                                 step=10
@@ -199,11 +205,11 @@ app.layout = html.Div([
                         ])
                    ]),
             column(width=6,
-                   style={'width': '50%',
+                   style={'width': '60%',
                           'display': 'inline-block',
                           'marginBottom': 0,
-                          'marginTop': 0,
-                          'marginLeft': 0,
+                          'marginTop': 10,
+                          'marginLeft': 10,
                           'marginRight': 0,
                           'padding': 0},
                    children=[
@@ -385,6 +391,9 @@ def update_output(gamma_value, overburden_value, e_module, nu_value,
                    x4=p4.x, y4=p4.y,
                    x8=p5.x, y8=p5.y,
                    x11=point_critical.x, y11=point_critical.y)
+
+    fig.update_xaxes(zeroline=True, zerolinewidth=1, zerolinecolor='black')
+    fig.update_yaxes(zeroline=True, zerolinewidth=1, zerolinecolor='black')
 
     return dcc.Graph(figure=fig)
 
