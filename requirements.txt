@@ -18,3 +18,4 @@ tenacity
 Werkzeug
 wincertstore==0.2
 zipp
+gunicorn
