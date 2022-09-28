@@ -1,0 +1,21 @@
+Brotli @ file:///C:/Windows/Temp/abs_63l7912z0e/croots/recipe/brotli-split_1659616056886/work
+certifi==2022.9.24
+click @ file:///D:/bld/click_1651215430313/work
+colorama @ file:///C:/Windows/TEMP/abs_9439aeb1-0254-449a-96f7-33ab5eb17fc8apleb4yn/croots/recipe/colorama_1657009099097/work
+dash @ file:///home/conda/feedstock_root/build_artifacts/dash_1663979721927/work
+Flask @ file:///home/conda/feedstock_root/build_artifacts/flask_1660054669620/work
+Flask-Compress @ file:///home/conda/feedstock_root/build_artifacts/flask-compress_1663772969809/work
+importlib-metadata @ file:///D:/bld/importlib-metadata_1653252997230/work
+itsdangerous @ file:///home/conda/feedstock_root/build_artifacts/itsdangerous_1648147185463/work
+Jinja2 @ file:///home/conda/feedstock_root/build_artifacts/jinja2_1654302431367/work
+MarkupSafe @ file:///D:/bld/markupsafe_1648737757460/work
+numpy @ file:///D:/bld/numpy_1660672974567/work
+pandas @ file:///D:/bld/pandas_1656001279371/work
+plotly @ file:///home/conda/feedstock_root/build_artifacts/plotly_1660480772389/work
+python-dateutil @ file:///tmp/build/80754af9/python-dateutil_1626374649649/work
+pytz @ file:///home/conda/feedstock_root/build_artifacts/pytz_1660580468234/work
+six @ file:///tmp/build/80754af9/six_1644875935023/work
+tenacity @ file:///home/conda/feedstock_root/build_artifacts/tenacity_1663807083684/work
+Werkzeug @ file:///home/conda/feedstock_root/build_artifacts/werkzeug_1660053523487/work
+wincertstore==0.2
+zipp @ file:///home/conda/feedstock_root/build_artifacts/zipp_1659400682470/work
