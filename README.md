@@ -6,6 +6,10 @@ The source code for a ground reaction curve is presented in this repository.
 
 Works with Python > 3.6
 
+Try it :point_right: [here](https://ground-curve.onrender.com)
+
+(Takes about a minute to start the app)
+
 ### Flow Rate Method
 
 ![Flow_rate](https://github.com/onurkoc/ground-curve/blob/master/images/Flow_rate_pic.png)
